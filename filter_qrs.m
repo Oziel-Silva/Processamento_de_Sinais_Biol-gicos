@@ -1,6 +1,6 @@
 clear all; close all; clc;
 
-load('sinais/ecg_grupo1/ECG_1.mat','fs','x');
+load('../sinais/ecg_grupo1/ECG_1.mat','fs','x');
 
 x = x(: ,1);
 n = 0 : length(x) -1;
@@ -50,6 +50,17 @@ y4 = filter(h4,1,y3); % filtro para tirar o a linha de base
 %transformada de Fourier do sinal após filtragem
 X_jw = fftshift(abs(fft(y4)));
 
+figure
+subplot(2,1,1)
+plot(t,y4);
+xlabel('tempo (segundos)')
+ylabel('x_c(t)')
+ 
+subplot(2,1,2)
+plot(f, (X_jw));
+xlabel('frequência (Hz)')
+ylabel('|X_jw(f)|')
+
 %separando os picos QRS (10 amostras de QRS)
 qrs1 = y4(2352 : 2385)';
 qrs2 = y4(2647 : 2673)';
@@ -79,3 +90,5 @@ mean_qrs = zeros(1,1000);
 for i = 1 : 1000
     mean_qrs(i) = (QRS1(i) + QRS2(i) + QRS3(i) +QRS4(i) + QRS5(i) + QRS6(i) + QRS7(i) + QRS8(i) + QRS9(i) + QRS10(i) )/10; 
 end
+figure
+plot(mean_qrs)
